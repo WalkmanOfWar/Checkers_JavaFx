@@ -22,8 +22,9 @@ public class CheckersApp extends Application {
     public static final int WIDTH  = 8;
     public static final int HEIGHT = 8;
 
-    /** Pixel offset so the board has breathing room from the window edge. */
-    private static final int BOARD_OFFSET = 10;
+    /** Pixel offset so the board has breathing room from the window edge.
+     *  Must be >= piece radiusX (36 px) so column-0 pieces are never clipped. */
+    private static final int BOARD_OFFSET = 40;
 
     private int turn = 0;
     private final Tile[][] board = new Tile[WIDTH][HEIGHT];
@@ -64,8 +65,8 @@ public class CheckersApp extends Application {
                 BOARD_OFFSET, BOARD_OFFSET,
                 WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
         boardBorder.setFill(Color.TRANSPARENT);
-        boardBorder.setStroke(Color.web("#6B4C2A"));
-        boardBorder.setStrokeWidth(3);
+        boardBorder.setStroke(Color.web("#8B6914"));
+        boardBorder.setStrokeWidth(2);
         boardBorder.setMouseTransparent(true);
 
         root.getChildren().add(tileGroup);

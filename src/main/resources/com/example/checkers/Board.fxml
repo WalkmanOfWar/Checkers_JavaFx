@@ -7,8 +7,13 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
+<!--
+    Window: 1080 × 900
+    Board:  800 × 800 at offset (40, 40)  →  tile 0..7 from (40,40) to (840,840)
+    Sidebar: x=860..1070 (210 px wide)
+-->
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      prefHeight="840.0" prefWidth="1060.0"
+      prefHeight="900.0" prefWidth="1080.0"
       style="-fx-background-color: #12121f;"
       xmlns="http://javafx.com/javafx/18"
       xmlns:fx="http://javafx.com/fxml/1"
@@ -16,101 +21,102 @@
     <children>
 
         <!-- ══════════════════════════════════════════ -->
-        <!--  Board decorative frame (behind tileGroup) -->
+        <!--  Board decorative outer frame             -->
         <!-- ══════════════════════════════════════════ -->
-        <Rectangle layoutX="5" layoutY="5" width="820" height="820"
+        <Rectangle layoutX="32" layoutY="32" width="816" height="816"
                    arcWidth="6" arcHeight="6"
-                   fill="#2a1a0a" stroke="#6B4C2A" strokeWidth="5"/>
+                   fill="#2a1a0a" stroke="#6B4C2A" strokeWidth="6"/>
 
         <!-- ══════════════════════════════════════════ -->
         <!--  Sidebar panel                            -->
         <!-- ══════════════════════════════════════════ -->
-        <Rectangle layoutX="838" layoutY="10" width="212" height="818"
+        <Rectangle layoutX="858" layoutY="20" width="212" height="858"
                    arcWidth="18" arcHeight="18"
                    fill="#1c1c30" stroke="#2e2e50" strokeWidth="1.5"/>
 
         <!-- Title -->
-        <Label layoutX="858" layoutY="22" text="WARCABY"
-               style="-fx-text-fill: #e8c97a; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, #e8c97a88, 8, 0.4, 0, 0);">
+        <Label layoutX="878" layoutY="32" text="WARCABY"
+               style="-fx-text-fill: #e8c97a; -fx-font-weight: bold;
+                      -fx-effect: dropshadow(gaussian, #e8c97a88, 8, 0.4, 0, 0);">
             <font><Font name="System Bold" size="28.0"/></font>
         </Label>
 
         <!-- Divider under title -->
-        <Line startX="848" startY="62" endX="1040" endY="62"
+        <Line startX="868" startY="74" endX="1062" endY="74"
               stroke="#2e2e50" strokeWidth="1.5"/>
 
         <!-- ─── GRACZ 1 card ─── -->
-        <Rectangle layoutX="848" layoutY="74" width="192" height="120"
+        <Rectangle layoutX="868" layoutY="86" width="192" height="125"
                    arcWidth="14" arcHeight="14"
                    fill="#1f1028" stroke="#c0392b" strokeWidth="1.5"/>
 
-        <Label layoutX="870" layoutY="84" text="GRACZ 1"
+        <Label layoutX="890" layoutY="96" text="GRACZ 1"
                style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;">
             <font><Font name="System Bold" size="13.0"/></font>
         </Label>
 
         <!-- Red piece indicator -->
-        <Ellipse layoutX="874" layoutY="145" radiusX="22" radiusY="18"
+        <Ellipse layoutX="892" layoutY="158" radiusX="22" radiusY="18"
                  fill="#cc2200" stroke="#8b1500" strokeWidth="2"/>
-        <Ellipse layoutX="866" layoutY="138" radiusX="8" radiusY="5"
+        <Ellipse layoutX="884" layoutY="150" radiusX="8" radiusY="5"
                  fill="#ff7060" opacity="0.45"/>
 
-        <!-- Red piece count -->
-        <Label fx:id="redLabel" layoutX="905" layoutY="122"
+        <!-- Red piece count + label -->
+        <Label fx:id="redLabel" layoutX="924" layoutY="133"
                text="12"
                style="-fx-text-fill: #ffffff; -fx-font-weight: bold;">
             <font><Font name="System Bold" size="38.0"/></font>
         </Label>
-        <Label layoutX="906" layoutY="163" text="pionków"
+        <Label layoutX="925" layoutY="175" text="pionków"
                style="-fx-text-fill: #888888;">
             <font><Font size="12.0"/></font>
         </Label>
 
         <!-- ─── GRACZ 2 card ─── -->
-        <Rectangle layoutX="848" layoutY="210" width="192" height="120"
+        <Rectangle layoutX="868" layoutY="228" width="192" height="125"
                    arcWidth="14" arcHeight="14"
                    fill="#101828" stroke="#aaaaaa" strokeWidth="1.5"/>
 
-        <Label layoutX="870" layoutY="220" text="GRACZ 2"
+        <Label layoutX="890" layoutY="238" text="GRACZ 2"
                style="-fx-text-fill: #cccccc; -fx-font-weight: bold;">
             <font><Font name="System Bold" size="13.0"/></font>
         </Label>
 
         <!-- White piece indicator -->
-        <Ellipse layoutX="874" layoutY="281" radiusX="22" radiusY="18"
+        <Ellipse layoutX="892" layoutY="300" radiusX="22" radiusY="18"
                  fill="#e8e8e8" stroke="#999999" strokeWidth="2"/>
-        <Ellipse layoutX="866" layoutY="274" radiusX="8" radiusY="5"
+        <Ellipse layoutX="884" layoutY="292" radiusX="8" radiusY="5"
                  fill="#ffffff" opacity="0.6"/>
 
-        <!-- White piece count -->
-        <Label fx:id="whiteLabel" layoutX="905" layoutY="258"
+        <!-- White piece count + label -->
+        <Label fx:id="whiteLabel" layoutX="924" layoutY="275"
                text="12"
                style="-fx-text-fill: #ffffff; -fx-font-weight: bold;">
             <font><Font name="System Bold" size="38.0"/></font>
         </Label>
-        <Label layoutX="906" layoutY="299" text="pionków"
+        <Label layoutX="925" layoutY="317" text="pionków"
                style="-fx-text-fill: #888888;">
             <font><Font size="12.0"/></font>
         </Label>
 
         <!-- ─── Timer card ─── -->
-        <Rectangle layoutX="848" layoutY="348" width="192" height="90"
+        <Rectangle layoutX="868" layoutY="370" width="192" height="90"
                    arcWidth="14" arcHeight="14"
                    fill="#0a1a28" stroke="#2980b9" strokeWidth="1.5"/>
 
-        <Label layoutX="870" layoutY="358" text="CZAS RUCHU"
+        <Label layoutX="890" layoutY="380" text="CZAS RUCHU"
                style="-fx-text-fill: #3498db; -fx-font-weight: bold;">
             <font><Font name="System Bold" size="11.0"/></font>
         </Label>
 
-        <Label fx:id="timerLabel" layoutX="852" layoutY="378"
+        <Label fx:id="timerLabel" layoutX="872" layoutY="400"
                text="00:00:000"
                style="-fx-text-fill: #e0f4ff; -fx-font-weight: bold;">
             <font><Font name="System Bold" size="22.0"/></font>
         </Label>
 
         <!-- ─── Win message ─── -->
-        <Label fx:id="winLabel" layoutX="848" layoutY="455"
+        <Label fx:id="winLabel" layoutX="868" layoutY="478"
                prefWidth="192"
                style="-fx-text-fill: #f1c40f; -fx-font-weight: bold;
                       -fx-alignment: center; -fx-text-alignment: center;
