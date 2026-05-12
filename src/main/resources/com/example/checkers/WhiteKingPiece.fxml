@@ -1,10 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.Cursor?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Ellipse?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.Font?>
 
-<Ellipse fx:id="whitePiece" fill="#6e6e6e" radiusX="31.25" radiusY="26" stroke="BLACK" strokeType="INSIDE" translateX="18.75" translateY="24" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
-   <cursor>
-      <Cursor fx:constant="CLOSED_HAND" />
-   </cursor>
-</Ellipse>
+<Group xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+    <cursor><Cursor fx:constant="OPEN_HAND"/></cursor>
+
+    <!-- Drop shadow -->
+    <Ellipse centerX="52" centerY="66" radiusX="30" radiusY="10" fill="#00000055"/>
+
+    <!-- Main body – dark silver -->
+    <Ellipse centerX="50" centerY="50" radiusX="36" radiusY="29">
+        <fill>
+            <RadialGradient centerX="0.32" centerY="0.28" radius="0.85" proportional="true">
+                <stops>
+                    <Stop offset="0.0"  color="#e0e0e0"/>
+                    <Stop offset="0.5"  color="#909090"/>
+                    <Stop offset="1.0"  color="#444444"/>
+                </stops>
+            </RadialGradient>
+        </fill>
+    </Ellipse>
+
+    <!-- Gold outer ring (king marker) -->
+    <Ellipse centerX="50" centerY="50" radiusX="36" radiusY="29"
+             fill="transparent" stroke="#e8c97a" strokeWidth="2.5"/>
+
+    <!-- Gold inner ring -->
+    <Ellipse centerX="50" centerY="50" radiusX="26" radiusY="20"
+             fill="transparent" stroke="#e8c97a90" strokeWidth="1.5"/>
+
+    <!-- Crown symbol -->
+    <Text x="38" y="56" fill="#e8c97a">
+        <font><Font size="18.0"/></font>
+        <text>♛</text>
+    </Text>
+
+    <!-- Specular highlight -->
+    <Ellipse centerX="38" centerY="38" radiusX="11" radiusY="7"
+             fill="#ffffff65" rotate="-25"/>
+</Group>

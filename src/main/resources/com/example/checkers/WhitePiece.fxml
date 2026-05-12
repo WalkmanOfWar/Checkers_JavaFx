@@ -1,10 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.Cursor?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Ellipse?>
+<?import javafx.scene.Cursor?>
 
-<Ellipse fx:id="whitePiece" fill="#ffffff" radiusX="31.25" radiusY="26" stroke="BLACK" strokeType="INSIDE" translateX="18.75" translateY="24" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
-   <cursor>
-      <Cursor fx:constant="CLOSED_HAND" />
-   </cursor>
-</Ellipse>
+<Group xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+    <cursor><Cursor fx:constant="OPEN_HAND"/></cursor>
+
+    <!-- Drop shadow -->
+    <Ellipse centerX="52" centerY="66" radiusX="30" radiusY="10" fill="#00000055"/>
+
+    <!-- Main body -->
+    <Ellipse centerX="50" centerY="50" radiusX="36" radiusY="29">
+        <fill>
+            <RadialGradient centerX="0.32" centerY="0.28" radius="0.85" proportional="true">
+                <stops>
+                    <Stop offset="0.0"  color="#ffffff"/>
+                    <Stop offset="0.5"  color="#cccccc"/>
+                    <Stop offset="1.0"  color="#888888"/>
+                </stops>
+            </RadialGradient>
+        </fill>
+    </Ellipse>
+
+    <!-- Outer rim -->
+    <Ellipse centerX="50" centerY="50" radiusX="36" radiusY="29"
+             fill="transparent" stroke="#777777" strokeWidth="2"/>
+
+    <!-- Inner ring -->
+    <Ellipse centerX="50" centerY="50" radiusX="26" radiusY="20"
+             fill="transparent" stroke="#cccccc70" strokeWidth="1.2"/>
+
+    <!-- Specular highlight -->
+    <Ellipse centerX="38" centerY="38" radiusX="13" radiusY="8"
+             fill="#ffffff70" rotate="-25"/>
+</Group>

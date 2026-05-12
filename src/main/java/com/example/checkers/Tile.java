@@ -12,7 +12,8 @@ public class Tile extends Rectangle {
         setWidth(TILE_SIZE);
         setHeight(TILE_SIZE);
         relocate(x * TILE_SIZE, y * TILE_SIZE);
-        setFill(light ? Color.valueOf("#feb") : Color.valueOf("#582"));
+        // Classic warm wood palette
+        setFill(light ? Color.valueOf("#F0D9B5") : Color.valueOf("#8B4513"));
     }
 
     public boolean hasPiece() {

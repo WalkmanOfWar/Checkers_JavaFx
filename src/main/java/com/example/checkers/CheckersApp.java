@@ -5,7 +5,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -16,12 +19,15 @@ import static com.example.checkers.PieceType.*;
 public class CheckersApp extends Application {
 
     public static final int TILE_SIZE = 100;
-    public static final int WIDTH = 8;
+    public static final int WIDTH  = 8;
     public static final int HEIGHT = 8;
+
+    /** Pixel offset so the board has breathing room from the window edge. */
+    private static final int BOARD_OFFSET = 10;
 
     private int turn = 0;
     private final Tile[][] board = new Tile[WIDTH][HEIGHT];
-    private final Group tileGroup = new Group();
+    private final Group tileGroup  = new Group();
     private final Group pieceGroup = new Group();
     private Piece mustStrike = null;
 
@@ -31,7 +37,8 @@ public class CheckersApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         Scene scene = new Scene(createContent());
-        stage.setTitle("Checkers");
+        stage.setTitle("Warcaby");
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
         stopwatch.start();
@@ -43,7 +50,27 @@ public class CheckersApp extends Application {
         controller = loader.getController();
         controller.bindTimer(stopwatch.textProperty());
 
-        root.getChildren().addAll(tileGroup, pieceGroup);
+        // Offset the board groups so tiles are inset from the window edge
+        tileGroup.setTranslateX(BOARD_OFFSET);
+        tileGroup.setTranslateY(BOARD_OFFSET);
+        pieceGroup.setTranslateX(BOARD_OFFSET);
+        pieceGroup.setTranslateY(BOARD_OFFSET);
+
+        // Soft drop shadow on the board surface
+        tileGroup.setEffect(new DropShadow(18, 3, 3, Color.web("#00000088")));
+
+        // Thin gold border drawn on top of tiles, below pieces
+        Rectangle boardBorder = new Rectangle(
+                BOARD_OFFSET, BOARD_OFFSET,
+                WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
+        boardBorder.setFill(Color.TRANSPARENT);
+        boardBorder.setStroke(Color.web("#6B4C2A"));
+        boardBorder.setStrokeWidth(3);
+        boardBorder.setMouseTransparent(true);
+
+        root.getChildren().add(tileGroup);
+        root.getChildren().add(boardBorder);
+        root.getChildren().add(pieceGroup);
 
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
@@ -52,7 +79,7 @@ public class CheckersApp extends Application {
                 tileGroup.getChildren().add(tile);
 
                 Piece piece = null;
-                if (y <= 2 && (x + y) % 2 != 0) piece = makePiece(RED, x, y);
+                if (y <= 2 && (x + y) % 2 != 0) piece = makePiece(RED,   x, y);
                 if (y >= 5 && (x + y) % 2 != 0) piece = makePiece(WHITE, x, y);
 
                 if (piece != null) {
@@ -63,6 +90,10 @@ public class CheckersApp extends Application {
         }
         return root;
     }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    //  Move validation
+    // ─────────────────────────────────────────────────────────────────────────
 
     private MoveResult tryMove(Piece piece, int newX, int newY) {
         if (board[newX][newY].hasPiece() || (newX + newY) % 2 == 0 || isWrongTurn(piece.getType())) {
@@ -110,8 +141,7 @@ public class CheckersApp extends Application {
 
     private boolean isWrongTurn(PieceType type) {
         boolean isRed = type == RED || type == REDKING;
-        // even turns: white's turn; odd turns: red's turn
-        return isRed == (turn % 2 == 0);
+        return isRed == (turn % 2 == 0); // even turns: white; odd turns: red
     }
 
     private boolean isOpponent(PieceType mover, PieceType other) {
@@ -132,30 +162,33 @@ public class CheckersApp extends Application {
     boolean canCaptureAgain(PieceType type, int x, int y) {
         int fwd = type.moveDir;
         if (canCaptureInDirection(type, x, y, -1, fwd)) return true;
-        if (canCaptureInDirection(type, x, y, 1, fwd)) return true;
+        if (canCaptureInDirection(type, x, y,  1, fwd)) return true;
         if (type.isKing()) {
             int bwd = type.secondaryDir;
             if (canCaptureInDirection(type, x, y, -1, bwd)) return true;
-            if (canCaptureInDirection(type, x, y, 1, bwd)) return true;
+            if (canCaptureInDirection(type, x, y,  1, bwd)) return true;
         }
         return false;
     }
 
     private Piece checkIfAnyPieceCanCapture(PieceType type) {
-        for (int y = 0; y < HEIGHT; y++) {
-            for (int x = 0; x < WIDTH; x++) {
+        for (int y = 0; y < HEIGHT; y++)
+            for (int x = 0; x < WIDTH; x++)
                 if (board[x][y].hasPiece() && board[x][y].getPiece().getType() == type
-                        && canCaptureAgain(type, x, y)) {
+                        && canCaptureAgain(type, x, y))
                     return board[x][y].getPiece();
-                }
-            }
-        }
         return null;
     }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    //  Piece creation & move execution
+    // ─────────────────────────────────────────────────────────────────────────
 
     private Piece makePiece(PieceType type, int x, int y) throws IOException {
         Piece piece = new Piece(type, x, y);
         piece.setOnMouseReleased(e -> {
+            piece.resetScale();
+
             int newX = toBoard(piece.getLayoutX());
             int newY = toBoard(piece.getLayoutY());
             MoveResult result = tryMove(piece, newX, newY);
@@ -183,15 +216,10 @@ public class CheckersApp extends Application {
                     pieceGroup.getChildren().remove(captured);
 
                     boolean capturedIsRed = captured.getType() == RED || captured.getType() == REDKING;
-                    if (capturedIsRed) {
-                        controller.decrementRed();
-                    } else {
-                        controller.decrementWhite();
-                    }
+                    if (capturedIsRed) controller.decrementRed();
+                    else               controller.decrementWhite();
 
-                    if (controller.isGameOver()) {
-                        stopwatch.stop();
-                    }
+                    if (controller.isGameOver()) stopwatch.stop();
                 }
             }
         });
@@ -200,13 +228,12 @@ public class CheckersApp extends Application {
 
     private void promoteToKingIfNeeded(Piece piece, int y) {
         try {
-            if (piece.getType() == RED && y == HEIGHT - 1) {
-                piece.promoteToKing(REDKING, getClass().getResource("RedKingPiece.fxml"));
-            } else if (piece.getType() == WHITE && y == 0) {
+            if (piece.getType() == RED   && y == HEIGHT - 1)
+                piece.promoteToKing(REDKING,   getClass().getResource("RedKingPiece.fxml"));
+            else if (piece.getType() == WHITE && y == 0)
                 piece.promoteToKing(WHITEKING, getClass().getResource("WhiteKingPiece.fxml"));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
