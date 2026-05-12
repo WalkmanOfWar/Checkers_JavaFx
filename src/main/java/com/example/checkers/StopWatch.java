@@ -4,16 +4,38 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
-public class StopWatch extends StackPane {
-    StringProperty text = new SimpleStringProperty();
-    Timeline timeline;
-    int mins = 0, secs = 0, millis = 0;
+public class StopWatch {
+    private final StringProperty text = new SimpleStringProperty("00:00:000");
+    private final Timeline timeline;
+    private int mins, secs, millis;
 
+    public StopWatch() {
+        timeline = new Timeline(new KeyFrame(Duration.millis(1), e -> tick()));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.setAutoReverse(false);
+    }
 
-    void change(StringProperty text) {
+    public void start() {
+        timeline.playFromStart();
+    }
+
+    public void stop() {
+        timeline.stop();
+    }
+
+    public void reset() {
+        mins = 0;
+        secs = 0;
+        millis = 0;
+    }
+
+    public StringProperty textProperty() {
+        return text;
+    }
+
+    private void tick() {
         if (millis == 1000) {
             secs++;
             millis = 0;
@@ -22,24 +44,6 @@ public class StopWatch extends StackPane {
             mins++;
             secs = 0;
         }
-        text.set(((((mins / 10) == 0) ? "0" : "") + mins + ":"
-                + (((secs / 10) == 0) ? "0" : "") + secs + ":"
-                + (((millis / 10) == 0) ? "00" : (((millis / 100) == 0) ? "0" : "")) + millis++));
+        text.set(String.format("%02d:%02d:%03d", mins, secs, millis++));
     }
-
-    public StopWatch() {
-
-        timeline = new Timeline(new KeyFrame(Duration.millis(1), event -> change(text)));
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.setAutoReverse(false);
-        timeline.playFromStart();
-    }
-
-    void reset() {
-        mins = 0;
-        secs = 0;
-        millis = 0;
-    }
-
-
 }

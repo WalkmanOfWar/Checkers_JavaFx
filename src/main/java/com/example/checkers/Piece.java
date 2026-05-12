@@ -5,6 +5,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Ellipse;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Objects;
 
 import static com.example.checkers.CheckersApp.TILE_SIZE;
@@ -14,33 +15,20 @@ public class Piece extends StackPane {
     private double mouseX, mouseY;
     private double oldX, oldY;
 
-    public double getOldX() {
-        return oldX;
-    }
-
-    public double getOldY() {
-        return oldY;
-    }
-
-    PieceType getType() {
-        return type;
-    }
-
-    public void setType(PieceType type) {
-        this.type = type;
-    }
-
     public Piece(PieceType type, int x, int y) throws IOException {
         this.type = type;
         move(x, y);
-        Ellipse bg;
-        switch (type) {
-            case RED -> bg = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("RedPiece.fxml")));
-            case WHITE -> bg = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("WhitePiece.fxml")));
-            default -> bg = null;
-        }
 
-        getChildren().add(bg);
+        String fxmlName = switch (type) {
+            case RED -> "RedPiece.fxml";
+            case WHITE -> "WhitePiece.fxml";
+            case REDKING -> "RedKingPiece.fxml";
+            case WHITEKING -> "WhiteKingPiece.fxml";
+        };
+
+        Ellipse visual = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlName)));
+        getChildren().add(visual);
+
         setOnMousePressed(e -> {
             mouseX = e.getSceneX();
             mouseY = e.getSceneY();
@@ -56,5 +44,27 @@ public class Piece extends StackPane {
 
     public void abortMove() {
         relocate(oldX, oldY);
+    }
+
+    public void promoteToKing(PieceType kingType, URL fxmlUrl) throws IOException {
+        this.type = kingType;
+        Ellipse kingVisual = FXMLLoader.load(Objects.requireNonNull(fxmlUrl));
+        getChildren().set(0, kingVisual);
+    }
+
+    public PieceType getType() {
+        return type;
+    }
+
+    public void setType(PieceType type) {
+        this.type = type;
+    }
+
+    public double getOldX() {
+        return oldX;
+    }
+
+    public double getOldY() {
+        return oldY;
     }
 }

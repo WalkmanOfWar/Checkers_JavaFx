@@ -1,5 +1,6 @@
 package com.example.checkers;
 
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -7,32 +8,36 @@ import javafx.scene.control.Label;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class Controller implements Initializable{
-    @FXML
-    public Label whiteLabel = new Label();
-    @FXML
-    public Label redLabel = new Label();
+public class Controller implements Initializable {
+    @FXML private Label redLabel;
+    @FXML private Label whiteLabel;
+    @FXML private Label timerLabel;
+    @FXML private Label winLabel;
 
+    private int redCount = 12;
+    private int whiteCount = 12;
 
-    public int redCounter=12;
-    public int whiteCounter=12;
-
-
-    public void decrementRed(){
-        redCounter--;
-    }
-    public void decrementWhite(){whiteCounter--;}
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        whiteLabel.setText(Integer.toString(whiteCounter=12));
-        redLabel.setText(Integer.toString(redCounter=12));
+        redLabel.setText("12");
+        whiteLabel.setText("12");
     }
-    public String playerWon() {
-        if (redCounter == 0) {
-            return "Gracz 2 wygral";
-        }else if (whiteCounter ==0){
-            return "Gracz 1 wygral";
-        }
-        else return  "";
+
+    public void bindTimer(StringProperty timerText) {
+        timerLabel.textProperty().bind(timerText);
+    }
+
+    public void decrementRed() {
+        redLabel.setText(String.valueOf(--redCount));
+        if (redCount == 0) winLabel.setText("Gracz 2 wygrał!");
+    }
+
+    public void decrementWhite() {
+        whiteLabel.setText(String.valueOf(--whiteCount));
+        if (whiteCount == 0) winLabel.setText("Gracz 1 wygrał!");
+    }
+
+    public boolean isGameOver() {
+        return redCount == 0 || whiteCount == 0;
     }
 }

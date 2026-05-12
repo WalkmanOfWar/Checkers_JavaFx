@@ -38,7 +38,7 @@
                 <Font size="21.0"/>
             </font>
         </Label>
-        <Label layoutX="882.0" layoutY="255.0" text="00:00">
+        <Label fx:id="timerLabel" layoutX="882.0" layoutY="255.0" text="00:00:000">
             <font>
                 <Font size="21.0"/>
             </font>
