@@ -19,6 +19,15 @@ public class Piece extends StackPane {
 
     public Piece(PieceType type, int x, int y) throws IOException {
         this.type = type;
+
+        // Force the StackPane to exactly fill its tile so the visual is
+        // centred inside the square (otherwise it shrinks to the inner
+        // Group's bounds and renders in the top-left corner).
+        setMinSize(TILE_SIZE, TILE_SIZE);
+        setPrefSize(TILE_SIZE, TILE_SIZE);
+        setMaxSize(TILE_SIZE, TILE_SIZE);
+        setPickOnBounds(false); // hover/click only on visible pixels
+
         move(x, y);
 
         String fxmlName = switch (type) {
